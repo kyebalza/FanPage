@@ -173,12 +173,46 @@
 
         //코멘트 수정하기
         function commentUpdate(comment_num2){
-            let inputString = prompt('수정할 내용을 입력하세요.');
+            let inputString = prompt('비밀번호를 입력하세요.');
+
             let num = comment_num2;
             let NickName = $('#nickname'+num).val();
             let Comment_num = $('#comment_num'+num).val();
             //let Passwd = $('#PassWd'+num).val();
             console.log('inputString : '+inputString);
+
+            $.ajax({
+                type: "GET",
+                url: "/homework",
+                data: {},
+                success: function (response) {
+                    console.log(response["penPage"])
+                    let rows = response["penPage"]
+                    for (let i = 0; i < rows.length; i++) {
+                        let passwd = rows[i]["passwd"]
+                        let nickname = rows[i]["nickName"]
+                        //let cheeringComment = rows[i]["cheeringComment"]
+                        let comment_num = rows[i]["comment_num"]
+
+                        //비밀번호가 같을 때 실행
+                        if(passwd == inputString && nickname == NickName && Comment_num == comment_num){
+                            let inputString2 = prompt('수정할 내용을 입력하세요.');
+
+                            $.ajax({
+                                type: "POST",
+                                url: "/reviewUpdate",
+                                data: {'passwd_receive':passwd, 'nickName_receive':nickname, 'cheeringComment_receive':inputString2 , 'comment_num_receive':comment_num},
+                                success: function (response) {
+                                        alert(response['msg'])
+                                        window.location.reload();
+                                }
+                            })
+                        }
+                    }
+
+                }
+            })
+
 
             //  $.ajax({
             //     type: 'POST',

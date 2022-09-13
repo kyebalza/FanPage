@@ -38,19 +38,6 @@ def homework_get():
 
     return jsonify({'penPage':all_penPage})
 
-@app.route("/homework/update", methods=["POST"])
-def homework_update():
-
-    all_penPage = list(db.penPage.find({}, {'_id': False}))
-
-    return jsonify({'penPage':all_penPage})
-
-# @app.route("/homework/delete", methods=["POST"])
-# def homework_delete():
-#
-#     all_penPage = list(db.penPage.find({}, {'_id': False}))
-#
-#     return jsonify({'penPage':all_penPage})
 
 @app.route("/reviewDelete", methods=["POST"])
 def homework_delete():
@@ -61,6 +48,16 @@ def homework_delete():
     print(passwd,nickname)
     db.penPage.delete_one({'passwd': passwd})
     return jsonify({'msg':comment_num+'번 글 삭제성공'})
+
+@app.route("/reviewUpdate", methods=["POST"])
+def homework_update():
+    passwd = request.form['passwd_receive']
+    nickname = request.form['nickName_receive']
+    cheeringComment = request.form['cheeringComment_receive']
+    comment_num = request.form['comment_num_receive']
+    print(passwd,nickname)
+    db.penPage.update_one({'comment_num': comment_num},{'$set':{'cheeringComment':cheeringComment}})
+    return jsonify({'msg':comment_num+'번 글 수정성공'})
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)

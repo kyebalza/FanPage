@@ -58,6 +58,6 @@ def homework_update():
     print(passwd,nickname)
     db.penPage.update_one({'comment_num': comment_num},{'$set':{'cheeringComment':cheeringComment}})
     return jsonify({'msg':comment_num+'번 글 수정성공'})
-
+    #테스트
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
